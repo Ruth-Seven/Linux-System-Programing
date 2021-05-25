@@ -12,28 +12,16 @@
 #include<sys/types.h>
 #include<sys/socket.h>
 #include<linux/in.h>
-#include<unistd.h>
-
+#include<stdlib.h>
+#include<signal.h>
 #define BACKLOG 20
 #define PORT 8888
 
-void process_conn_server(int sc){
-	printf("Server: connection\n");
-	ssize_t size = 0;
-	char buffer[1024];
-	while(1){
-		size = read(sc, buffer, 1024);
-		if(size == 0){
-			usleep(1);
-			return;
-		}
-		sprintf(buffer, "%ld bytes  altogether\nMesssage: %s\n", size, buffer);
-		write(sc, buffer, strlen(buffer) + 1); 
-	}	   
-}
+void process_conn_server(int); 
+
+static int ss = 0;
 
 int server(){
-	int ss;
 	struct sockaddr_in server_addr;
 	struct sockaddr_in client_addr;
 
@@ -82,6 +70,15 @@ int server(){
 	return 0;
 }
 
-int main( argvhar** args){
+void handler_sig_int(int single){
+	if(single == 9){
+		printf("Abnormal Exit!\n Close the listen file handler");
+		close(ss);	
+	}
+	exit(1);
+}
+
+int main(int argc, char** args){
+	signal(SIGINT, handler_sig_int);
 	return server();
 }

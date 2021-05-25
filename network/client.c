@@ -16,25 +16,13 @@
 
 #define PORT 8888
 
-void process_conn_client(int s){
-	printf("Clinet: connection\n");
-	ssize_t size = 0;
-	char buffer[1024];
-	while(1){
-		printf("Input messsage to server:", buffer); // 缓冲区溢出？
-		scanf("%s", buffer);
-		write(s, buffer, strlen(buffer) + 1); // 发送数据
-		while((size = read(s, buffer, 1024)) == 0){ // 接受响应
-			usleep(1);
-		}
-	}	   
-}
+void process_conn_client(int); 
 
-int server(const char* ip){
+int client(const char* ip){
 	int sc;
 	struct sockaddr_in server_addr;
 
-	sc = sokcet(AF_INET, SOCK_STREAM, 0);
+	sc = socket(AF_INET, SOCK_STREAM, 0);
 	if(sc < 0){
 		printf("socket error\n");
 		return -1;
@@ -56,5 +44,5 @@ int server(const char* ip){
 }
 
 int main(int argv, char **args){
-	return server(args[1]);
+	return client(args[1]);
 }
