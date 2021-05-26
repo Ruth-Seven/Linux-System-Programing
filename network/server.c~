@@ -70,15 +70,15 @@ int server(){
 	return 0;
 }
 
-void handler_sig_int(int single){
-	if(single == 9){
-		printf("Abnormal Exit!\n Close the listen file handler");
+void handler_sig_int_server(int signal){
+	if(signal == 2){
+		printf("Abnormal Exit! Sigle: %d\n Close the listen file handler\n", signal);
 		close(ss);	
 	}
 	exit(1);
 }
 
 int main(int argc, char** args){
-	signal(SIGINT, handler_sig_int);
+	signal(SIGINT, handler_sig_int_server);
 	return server();
 }

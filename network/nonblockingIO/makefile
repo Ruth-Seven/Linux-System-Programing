@@ -1,7 +1,7 @@
 # VPATH=$(find /usr/include/* -name "sys"):.
 # VPATH=$(find /usr/include/* -name "sys"):.
 TCP_SERVER_CLIENT=tcp_process.o
-
+VPATH=..:.
 all: server client
 
 client:$(TCP_SERVER_CLIENT) client.o 

@@ -12,10 +12,13 @@
 #include<sys/types.h>
 #include<sys/socket.h>
 #include<linux/in.h>
+#include<sys/signal.h>
+#include<stdlib.h>
 #include<unistd.h>
 
 #define PORT 8888
 
+static int sc = 0;
 void process_conn_client(int); 
 
 int client(const char* ip){
@@ -43,6 +46,16 @@ int client(const char* ip){
 	return 0;
 }
 
-int main(int argv, char **args){
+void handler_sig_int_client(int signal){
+	if(signal == 2){
+		printf("Abnormal Exit! Sigle: %d\n Close the listen file handler\n", signal);
+		close(sc);	
+	}
+	exit(1);
+}
+
+int main(int argc, char** args){
+	signal(SIGINT, handler_sig_int_client);
+
 	return client(args[1]);
 }
